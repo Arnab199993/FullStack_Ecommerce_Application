@@ -1,5 +1,6 @@
 import App from "./App";
 import LogOut from "./Auth/LogOut";
+import SignUp from "./Auth/SignUp";
 import Navbar from "./Component/Navbar";
 import AddProducts from "./Pages/AddProducts";
 import Profile from "./Pages/Profile";
@@ -29,6 +30,10 @@ const Routes = [
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/register",
+    element: <SignUp />,
   },
 ];
 export default Routes;

@@ -11,6 +11,7 @@ const Navbar = () => {
             <Link to={"/update"}>Update Products</Link>
             <Link to={"/logout"}>Logout </Link>
             <Link to={"/profile"}>Profile </Link>
+            <Link to={"/register"}>SignUp</Link>
           </li>
         </ul>
       </div>

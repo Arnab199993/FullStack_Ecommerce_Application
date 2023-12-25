@@ -1,10 +1,44 @@
 .nav-ul {
   list-style-type: none;
+  padding: 5px;
+  margin: 0;
+  background-color: skyblue;
 }
 .nav-ul li {
-  width: 25rem;
+  width: 35rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+}
+.nav-ul li a {
+  color: #fff;
+  padding: 5px;
+  text-decoration: none;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+  background-color: skyblue;
+}
+.inputBox {
+  margin-left: 30%;
+  display: block;
+  margin: 25px;
+  padding: 7px;
+  width: 300px;
+  border: 1px solid skyblue;
+}
+.register {
+  margin-left: 30%;
+}
+.appButton {
+  margin: 25px;
+  padding: 10px;
+  width: 150px;
+  background-color: skyblue;
+  border: 1px solid;
+  cursor: pointer;
 }
