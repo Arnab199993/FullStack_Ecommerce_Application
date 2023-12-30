@@ -6,9 +6,7 @@ const LogOut = () => {
   return (
     <>
       <div>
-        <Navbar />
         <h1>LogOut</h1>
-        <Footer />
       </div>
     </>
   );

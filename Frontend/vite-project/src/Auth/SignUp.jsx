@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import Navbar from "../Component/Navbar";
-import Footer from "../Component/Footer";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 const SignUp = () => {
   const defaultState = {
     text: "",
@@ -9,17 +7,48 @@ const SignUp = () => {
     password: "",
   };
   const [state, setState] = useState(defaultState);
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
-  const handleClick = () => {
-    console.log(state);
+  const handleClick = async () => {
+    console.log("state", state);
     setState(defaultState);
+    if (state.email !== "" && state.text !== "" && state.password !== "") {
+      const result = await fetch("http://localhost:5000/sign-up", {
+        method: "POST",
+        body: JSON.stringify({
+          name: state.text,
+          email: state.email,
+          password: state.password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await result.json();
+      if (response) {
+        localStorage.setItem("user", JSON.stringify(response));
+        navigate("/");
+      } else {
+        console.log("Registration Failed");
+      }
+    }
   };
+  const authValidation = () => {
+    const auth = JSON.parse(localStorage.getItem("user"));
+    if (auth) {
+      navigate("/");
+    }
+  };
+  useEffect(() => {
+    authValidation();
+  }, []);
+
   return (
     <>
       <div>
-        <Navbar />
         <div className="register">
           <h1>Register</h1>
           <input
@@ -50,7 +79,6 @@ const SignUp = () => {
             Sign Up
           </button>
         </div>
-        <Footer />
       </div>
     </>
   );

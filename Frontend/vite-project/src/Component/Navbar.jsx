@@ -1,6 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 const Navbar = () => {
+  const auth = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const logOut = () => {
+    localStorage.removeItem("user");
+    navigate("/register");
+  };
+
   return (
     <>
       <div>
@@ -9,9 +16,14 @@ const Navbar = () => {
             <Link to={"/"}>Products</Link>
             <Link to={"/products"}>Add Products</Link>
             <Link to={"/update"}>Update Products</Link>
-            <Link to={"/logout"}>Logout </Link>
             <Link to={"/profile"}>Profile </Link>
-            <Link to={"/register"}>SignUp</Link>
+            {auth ? (
+              <Link onClick={logOut} to={"/register"}>
+                Logout
+              </Link>
+            ) : (
+              <Link to={"/register"}>SignUp</Link>
+            )}
           </li>
         </ul>
       </div>

@@ -6,9 +6,7 @@ const AddProducts = () => {
   return (
     <>
       <div>
-        <Navbar />
         <h1> Add Products</h1>
-        <Footer />
       </div>
     </>
   );
