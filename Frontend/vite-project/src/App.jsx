@@ -10,6 +10,7 @@ import Navbar from "./Component/Navbar";
 import AddProducts from "./Pages/AddProducts";
 import Profile from "./Pages/Profile";
 import UpdateProducts from "./Pages/UpdateProducts";
+import Login from "./Auth/Login";
 function App() {
   const [count, setCount] = useState(0);
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/register" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </BrowserRouter>
         <Footer />

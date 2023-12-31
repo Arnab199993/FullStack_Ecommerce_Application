@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 require("./DataBase/Config");
 const users = require("./DataBase/Users");
+const Products = require("./DataBase/Products");
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -32,6 +34,21 @@ app.post("/login", async (req, res) => {
     }
   } else {
     res.send({ result: "Give it a valid username and password" });
+  }
+});
+app.post("/add-product", async (req, res) => {
+  const data = new Products(req.body);
+  const result = await data.save();
+  res.send(result);
+  console.log(req.body);
+  console.log(result);
+});
+app.get("/productsList", async (req, res) => {
+  const data = await Products.find();
+  if (data.length > 0) {
+    res.send(data);
+  } else {
+    res.send({ result: "No result found" });
   }
 });
 app.listen(5000);

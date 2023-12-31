@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const SignUp = () => {
   const defaultState = {
     text: "",
@@ -75,6 +75,14 @@ const SignUp = () => {
             value={state.password}
             onChange={handleChange}
           />
+          <div className="login-link">
+            <p>
+              Already an user{" "}
+              <Link className="loginText" to={"/login"}>
+                Login
+              </Link>
+            </p>
+          </div>
           <button onClick={handleClick} className="appButton" type="button">
             Sign Up
           </button>
