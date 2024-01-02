@@ -51,4 +51,32 @@ app.get("/productsList", async (req, res) => {
     res.send({ result: "No result found" });
   }
 });
+app.delete("/product/:id", async (req, res) => {
+  const data = await Products.deleteOne({ _id: req.params.id });
+  res.send(data);
+});
+app.get("/product/:id", async (req, res) => {
+  try {
+    let result = await Products.findOne({ _id: req.params.id });
+    if (result) {
+      res.send(result);
+    } else {
+      res.send({ data: "No record found" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+app.put("/product/:id", async (req, res) => {
+  try {
+    let result = await Products.updateOne(
+      { _id: req.params.id },
+      { $set: req.body }
+    );
+    res.send(result);
+    console.log("resulttt", result);
+  } catch (error) {
+    console.log(error);
+  }
+});
 app.listen(5000);
