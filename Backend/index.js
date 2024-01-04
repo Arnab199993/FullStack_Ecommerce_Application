@@ -79,4 +79,23 @@ app.put("/product/:id", async (req, res) => {
     console.log(error);
   }
 });
+app.get("/search/:key", async (req, res) => {
+  const data = await Products.find({
+    $or: [
+      {
+        name: { $regex: req.params.key, $options: "i" },
+      },
+      {
+        company: { $regex: req.params.key, $options: "i" },
+      },
+      {
+        Category: { $regex: req.params.key, $options: "i" },
+      },
+      {
+        Price: { $regex: req.params.key, $options: "i" },
+      },
+    ],
+  });
+  res.send(data);
+});
 app.listen(5000);
