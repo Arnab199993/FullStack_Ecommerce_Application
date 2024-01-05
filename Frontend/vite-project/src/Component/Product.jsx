@@ -7,14 +7,17 @@ const BASE_URL = "http://localhost:5000";
 
 const Product = () => {
   const [product, setProduct] = useState([]);
-  const [searchData, setSearchData] = useState("");
-  console.log("searchDataaa", searchData);
+  console.log("productttt", product);
   const navigate = useNavigate();
 
   const fetchData = async () => {
-    const res = await fetch(`${BASE_URL}/productsList`);
+    const res = await fetch(`${BASE_URL}/productsList`, {
+      headers: {
+        authorization: JSON.parse(localStorage.getItem("token")),
+      },
+    });
     const data = await res.json();
-    if (data.length > 0) {
+    if (data?.length > 0) {
       setProduct(data);
     }
   };
@@ -33,15 +36,19 @@ const Product = () => {
   };
 
   const deBounceHandleSearch = Debounce(async (searchText) => {
-    if (searchText.trim() === "") {
-      return;
-    }
-    const searchResult = await fetch(
-      `${BASE_URL}/search/${searchText.toLowerCase()}`
-    );
-    const data = await searchResult.json();
-    if (data.length > 0) {
-      setSearchData(data);
+    if (searchText.trim() !== "") {
+      const searchResult = await fetch(
+        `${BASE_URL}/search/${searchText.toLowerCase()}`
+      );
+      const data = await searchResult.json();
+      if (data.length > 0) {
+        setProduct(data);
+      } else {
+        // Set product to an empty array when no search results are found
+        setProduct([]);
+      }
+    } else {
+      fetchData();
     }
   }, 500);
 
@@ -66,38 +73,25 @@ const Product = () => {
           <li>Price</li>
           <li>Operation</li>
         </ul>
-        {searchData.length > 0
-          ? searchData.map((productList, i) => (
-              <ul key={productList._id}>
-                <li>{i + 1} </li>
-                <li>{productList.name} </li>
-                <li>{productList.company} </li>
-                <li>{productList.category} </li>
-                <li>$ {productList.price}</li>
-                <li>
-                  <button onClick={() => handleDelete(productList._id)}>
-                    Delete
-                  </button>
-                  <Link to={`/update/${productList._id}`}>Update</Link>
-                </li>
-              </ul>
-            ))
-          : searchData.length === 0 &&
-            product.map((productList, i) => (
-              <ul key={productList._id}>
-                <li>{i + 1} </li>
-                <li>{productList.name} </li>
-                <li>{productList.company} </li>
-                <li>{productList.category} </li>
-                <li>$ {productList.price}</li>
-                <li>
-                  <button onClick={() => handleDelete(productList._id)}>
-                    Delete
-                  </button>
-                  <Link to={`/update/${productList._id}`}>Update</Link>
-                </li>
-              </ul>
-            ))}
+        {product?.length > 0 ? (
+          product?.map((productList, i) => (
+            <ul key={productList._id}>
+              <li>{i + 1} </li>
+              <li>{productList.name} </li>
+              <li>{productList.company} </li>
+              <li>{productList.category} </li>
+              <li>$ {productList.price}</li>
+              <li>
+                <button onClick={() => handleDelete(productList._id)}>
+                  Delete
+                </button>
+                <Link to={`/update/${productList._id}`}>Update</Link>
+              </li>
+            </ul>
+          ))
+        ) : (
+          <h1>No result found</h1>
+        )}
       </div>
     </>
   );

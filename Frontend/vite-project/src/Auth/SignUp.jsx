@@ -28,8 +28,10 @@ const SignUp = () => {
         },
       });
       const response = await result.json();
-      if (response) {
-        localStorage.setItem("user", JSON.stringify(response));
+      console.log("responseeee", response);
+      if (response.auth) {
+        localStorage.setItem("user", JSON.stringify(response.result));
+        localStorage.setItem("token", JSON.stringify(response.auth));
         navigate("/");
       } else {
         console.log("Registration Failed");

@@ -3,7 +3,8 @@ const cors = require("cors");
 require("./DataBase/Config");
 const users = require("./DataBase/Users");
 const Products = require("./DataBase/Products");
-
+const Jwt = require("jsonwebtoken");
+const jwtKey = "E-Commerce";
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -22,18 +23,30 @@ app.post("/sign-up", async (req, res) => {
   delete result.password;
   console.log(req.body);
   console.log(result);
-  res.send(result);
+  Jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+    if (err) {
+      res.send("Something went wrong!Please try again after some time");
+    }
+    res.send({ result, auth: token });
+  });
 });
 app.post("/login", async (req, res) => {
-  if (req.body.email && req.body.password) {
-    const data = await users.findOne(req.body).select("-password");
-    if (data) {
-      res.send(data);
+  try {
+    if (req.body.email && req.body.password) {
+      const data = await users.findOne(req.body).select("-password");
+      if (data) {
+        Jwt.sign({ data }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+          if (err) {
+            res.send("Something went wrong!Please try again after some time");
+          }
+          res.send({ data, auth: token });
+        });
+      }
     } else {
-      res.send({ result: "No user found" });
+      res.send({ result: "Give it a valid username and password" });
     }
-  } else {
-    res.send({ result: "Give it a valid username and password" });
+  } catch (error) {
+    console.log(error);
   }
 });
 app.post("/add-product", async (req, res) => {
@@ -92,7 +105,7 @@ app.get("/search/:key", async (req, res) => {
         Category: { $regex: req.params.key, $options: "i" },
       },
       {
-        Price: { $regex: req.params.key, $options: "i" },
+        price: { $regex: req.params.key, $options: "i" },
       },
     ],
   });
