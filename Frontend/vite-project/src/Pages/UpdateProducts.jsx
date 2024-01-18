@@ -12,6 +12,8 @@ const UpdateProducts = () => {
   };
   const [productData, setProductData] = useState(defaultData);
   const storedData = JSON.parse(localStorage.getItem("user")) || {};
+  const userToken = localStorage.getItem("token");
+
   const navigate = useNavigate();
 
   const [editData, setEditData] = useState("");
@@ -31,6 +33,7 @@ const UpdateProducts = () => {
         }),
         headers: {
           "Content-Type": "application/json",
+          authorization: `bearer ${userToken}`,
         },
       });
       res = await res.json();
@@ -42,7 +45,11 @@ const UpdateProducts = () => {
   };
 
   const getProductDetails = async () => {
-    const res = await fetch(`${BASE_URL}/product/${params.id}`);
+    const res = await fetch(`${BASE_URL}/product/${params.id}`, {
+      headers: {
+        authorization: `bearer ${userToken}`,
+      },
+    });
     const data = await res.json();
     if (data) {
       setEditData(data);
