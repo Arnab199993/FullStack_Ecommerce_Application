@@ -11,6 +11,7 @@ const jwtKey = "E-Commerce";
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.static("Uploads"));
 
 const uploadDirectory = "Uploads";
 if (!fs.existsSync(uploadDirectory)) {
@@ -32,7 +33,7 @@ app.post("/upload", verifyToken, upload, async (req, res) => {
     const { filename } = req.file;
     const data = new Files({ file: filename });
     const result = await data.save();
-
+    console.log("ImageRess", result);
     res.send(result);
   } catch (error) {
     console.error(error);
@@ -47,21 +48,7 @@ app.get("/view-files", verifyToken, async (req, res) => {
     res.send("No result found");
   }
 });
-// app.get("/uploads/:filename", (req, res) => {
-//   const filePath = path.join(uploadDirectory, req.params.filename);
 
-//   // Use binary encoding to ensure correct handling of binary data
-//   fs.readFile(filePath, "binary", (err, data) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).send("Internal Server Error");
-//       return;
-//     }
-
-//     res.setHeader("Content-Type", "image/jpeg"); // Adjust content type based on your file type
-//     res.end(data, "binary");
-//   });
-// });
 app.get("/", verifyToken, async (req, res) => {
   try {
     const data = await users.find();

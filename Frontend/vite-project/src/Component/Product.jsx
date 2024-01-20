@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Debounce } from "../Optimization/Debounce";
 
 const BASE_URL = "http://localhost:5000";
@@ -9,8 +8,9 @@ const Product = () => {
   const [product, setProduct] = useState([]);
   const [file, setFile] = useState([]);
   const navigate = useNavigate();
-  console.log("fileeee", file);
+
   const storedData = localStorage.getItem("token");
+
   const fetchData = async () => {
     try {
       const res = await fetch(`${BASE_URL}/productsList`, {
@@ -26,6 +26,7 @@ const Product = () => {
       console.log(error);
     }
   };
+
   const fetchFiles = async () => {
     try {
       const data = await fetch(`${BASE_URL}/view-files`, {
@@ -44,6 +45,7 @@ const Product = () => {
       console.log(error);
     }
   };
+
   const handleDelete = async (id) => {
     let result = await fetch(`${BASE_URL}/product/${id}`, {
       method: "DELETE",
@@ -82,9 +84,11 @@ const Product = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
   useEffect(() => {
     fetchFiles();
   }, []);
+
   return (
     <>
       <div className="product-list">
@@ -121,7 +125,13 @@ const Product = () => {
                 {file ? (
                   <div>
                     {file?.map((fileData) => (
-                      <img key={fileData?._id} src={fileData?.file} />
+                      <img
+                        key={fileData?._id}
+                        src={`${BASE_URL}/${fileData?.file}`}
+                        alt={fileData?.file}
+                        height={40}
+                        width={40}
+                      />
                     ))}
                   </div>
                 ) : (

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 const AddProducts = () => {
   const BASE_URL = "http://localhost:5000";
   const defaultData = {
