@@ -6,8 +6,7 @@ const BASE_URL = "http://localhost:5000";
 
 const Product = () => {
   const [product, setProduct] = useState([]);
-  const [file, setFile] = useState([]);
-  const navigate = useNavigate();
+  console.log("producttt", product);
 
   const storedData = localStorage.getItem("token");
 
@@ -27,36 +26,24 @@ const Product = () => {
     }
   };
 
-  const fetchFiles = async () => {
+  const handleDelete = async (id) => {
+    console.log("handleDeleteee");
     try {
-      const data = await fetch(`${BASE_URL}/view-files`, {
-        method: "GET",
+      let result = await fetch(`${BASE_URL}/product/${id}`, {
+        method: "DELETE",
         headers: {
+          "Content-Type": "application/json",
           authorization: `bearer ${localStorage.getItem("token")}`,
         },
       });
-      const response = await data.json();
-
-      if (response) {
-        console.log("responseeee", response);
-        setFile(response);
+      result = await result.json();
+      if (result && result.deletedCount > 0) {
+        await fetchData();
+      } else {
+        console.log("Delete operation failed");
       }
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    let result = await fetch(`${BASE_URL}/product/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    result = await result.json();
-    if (result) {
-      fetchData();
     }
   };
 
@@ -85,10 +72,6 @@ const Product = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-
   return (
     <>
       <div className="product-list">
@@ -115,6 +98,7 @@ const Product = () => {
               <li>{productList.company} </li>
               <li>{productList.category} </li>
               <li>$ {productList.price}</li>
+
               <li>
                 <button onClick={() => handleDelete(productList._id)}>
                   Delete
@@ -122,21 +106,13 @@ const Product = () => {
                 <Link to={`/update/${productList._id}`}>Update</Link>
               </li>
               <li>
-                {file ? (
-                  <div>
-                    {file?.map((fileData) => (
-                      <img
-                        key={fileData?._id}
-                        src={`${BASE_URL}/${fileData?.file}`}
-                        alt={fileData?.file}
-                        height={40}
-                        width={40}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  "No file found"
-                )}
+                <img
+                  key={productList?._id}
+                  src={`${BASE_URL}/${productList?.files}`}
+                  alt={productList?.files}
+                  height={40}
+                  width={40}
+                />
               </li>
             </ul>
           ))

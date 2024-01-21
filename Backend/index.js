@@ -5,13 +5,12 @@ const cors = require("cors");
 require("./DataBase/Config");
 const users = require("./DataBase/Users");
 const Products = require("./DataBase/Products");
-const Files = require("./DataBase/Files");
 const Jwt = require("jsonwebtoken");
 const jwtKey = "E-Commerce";
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static("Uploads"));
+app.use("/Uploads", express.static("Uploads"));
 
 const uploadDirectory = "Uploads";
 if (!fs.existsSync(uploadDirectory)) {
@@ -26,28 +25,7 @@ const upload = multer({
       cb(null, file.fieldname + "-" + Date.now() + ".jpg");
     },
   }),
-}).single("user_file");
-
-app.post("/upload", verifyToken, upload, async (req, res) => {
-  try {
-    const { filename } = req.file;
-    const data = new Files({ file: filename });
-    const result = await data.save();
-    console.log("ImageRess", result);
-    res.send(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-app.get("/view-files", verifyToken, async (req, res) => {
-  const data = await Files.find();
-  if (data.length > 0) {
-    res.send(data);
-  } else {
-    res.send("No result found");
-  }
-});
+}).single("file");
 
 app.get("/", verifyToken, async (req, res) => {
   try {
@@ -64,7 +42,7 @@ app.post("/sign-up", async (req, res) => {
   delete result.password;
   console.log(req.body);
   console.log(result);
-  Jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+  Jwt.sign({ result }, jwtKey, { expiresIn: "8h" }, (err, token) => {
     if (err) {
       res.send("Something went wrong!Please try again after some time");
     }
@@ -90,12 +68,20 @@ app.post("/login", async (req, res) => {
     console.log(error);
   }
 });
-app.post("/add-product", verifyToken, async (req, res) => {
-  const data = new Products(req.body);
-  const result = await data.save();
-  res.send(result);
-  console.log(req.body);
-  console.log(result);
+app.post("/add-product", upload, verifyToken, async (req, res) => {
+  try {
+    const data = new Products(req.body);
+    data.files = req.file.path;
+    const result = await data.save();
+    if (!data || !data.files) {
+      res.send({ status: 400, message: "Bad request" });
+    } else {
+      res.send(result);
+    }
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
 });
 app.get("/productsList", verifyToken, async (req, res) => {
   const data = await Products.find();
@@ -161,7 +147,7 @@ function verifyToken(req, res, next) {
         res.status(401).send({ result: "Please provide valid token" });
       } else {
         next();
-        console.log("Middlewear Called", token);
+        // console.log("Middlewear Called", token);
       }
     });
   } else {

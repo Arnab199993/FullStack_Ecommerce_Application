@@ -2,60 +2,41 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AddProducts = () => {
+  const storedData = JSON.parse(localStorage.getItem("user")) || {};
   const BASE_URL = "http://localhost:5000";
   const defaultData = {
     name: "",
     price: "",
     category: "",
     company: "",
-    userId: "",
+    userId: storedData._id,
     file: null,
   };
   const [productData, setProductData] = useState(defaultData);
   const [error, setError] = useState(false);
-  const storedData = JSON.parse(localStorage.getItem("user")) || {};
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setProductData({ ...productData, [event.target.name]: event.target.value });
-  };
-
-  const handleUpload = async (file) => {
-    try {
-      const formData = new FormData();
-      formData.append("user_file", file);
-
-      const data = await fetch(`${BASE_URL}/upload`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          authorization: `bearer ${localStorage.getItem("token")}`,
-        },
+    if (event.target.name === "file") {
+      setProductData({ ...productData, file: event.target.files[0] });
+    } else {
+      setProductData({
+        ...productData,
+        [event.target.name]: event.target.value,
       });
-
-      const response = await data.json();
-      if (response) {
-        console.log("File upload response:", response);
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
     }
   };
 
   const handleClick = async () => {
+    console.log("Productssaaaa", productData);
+
     try {
-      if (productData.file) {
-        await handleUpload(productData.file);
-      }
-
-      const data = JSON.stringify({
-        name: productData.name,
-        price: productData.price,
-        category: productData.category,
-        company: productData.company,
-        userId: storedData._id,
-      });
-
+      const formData = new FormData();
+      formData.append("name", productData.name);
+      formData.append("price", productData.price);
+      formData.append("category", productData.category);
+      formData.append("company", productData.company);
+      formData.append("file", productData.file);
       if (
         !productData.category ||
         !productData.company ||
@@ -66,21 +47,17 @@ const AddProducts = () => {
         setError(true);
         return false;
       }
-
       let res = await fetch(`${BASE_URL}/add-product`, {
         method: "POST",
-        body: data,
+        body: formData,
         headers: {
-          "Content-Type": "application/json",
           authorization: `bearer ${localStorage.getItem("token")}`,
         },
       });
-
       res = await res.json();
-
+      console.log("resssss", res);
       if (res && productData.file) {
         setProductData(defaultData);
-
         navigate("/");
       }
     } catch (error) {
