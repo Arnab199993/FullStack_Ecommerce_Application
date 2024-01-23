@@ -1,15 +1,13 @@
 const express = require("express");
-const serverless = require("serverless-http");
 const multer = require("multer");
 const fs = require("fs");
 const cors = require("cors");
-require("../DataBase/Config");
-const users = require("../DataBase/Users");
-const Products = require("../DataBase/Products");
+require("./DataBase/Config");
+const users = require("./DataBase/Users");
+const Products = require("./DataBase/Products");
 const Jwt = require("jsonwebtoken");
 const jwtKey = "E-Commerce";
 const app = express();
-const router = express.Router();
 
 app.use(express.json());
 app.use(cors());
@@ -193,6 +191,5 @@ function verifyToken(req, res, next) {
     res.status(403).send({ result: "Please add token with header" });
   }
 }
-app.use("./.netfily/functions/index", router);
-module.exports.handler = serverless(app);
+
 app.listen(5000);
