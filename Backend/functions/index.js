@@ -1,13 +1,16 @@
 const express = require("express");
+const serverless = require("serverless-http");
 const multer = require("multer");
 const fs = require("fs");
 const cors = require("cors");
-require("./DataBase/Config");
-const users = require("./DataBase/Users");
-const Products = require("./DataBase/Products");
+require("../DataBase/Config");
+const users = require("../DataBase/Users");
+const Products = require("../DataBase/Products");
 const Jwt = require("jsonwebtoken");
 const jwtKey = "E-Commerce";
 const app = express();
+const router = express.Router();
+
 app.use(express.json());
 app.use(cors());
 app.use("/Uploads", express.static("Uploads"));
@@ -35,20 +38,52 @@ app.get("/", verifyToken, async (req, res) => {
     console.log(error);
   }
 });
+// app.post("/sign-up", async (req, res) => {
+//   const data = new users(req.body);
+//   let result = await data.save();
+//   result = result.toObject();
+//   delete result.password;
+//   console.log(req.body);
+//   console.log(result);
+//   Jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+//     if (err) {
+//       res.send("Something went wrong!Please try again after some time");
+//     }
+//     res.send({ result, auth: token });
+//   });
+// });
 app.post("/sign-up", async (req, res) => {
-  const data = new users(req.body);
-  let result = await data.save();
-  result = result.toObject();
-  delete result.password;
-  console.log(req.body);
-  console.log(result);
-  Jwt.sign({ result }, jwtKey, { expiresIn: "8h" }, (err, token) => {
-    if (err) {
-      res.send("Something went wrong!Please try again after some time");
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .send({ result: "Please provide all required fields" });
     }
-    res.send({ result, auth: token });
-  });
+    const existingUser = await users.findOne({ email });
+    if (existingUser) {
+      return res.status(400).send({ result: "Email is already registered" });
+    }
+
+    const data = new users(req.body);
+    let result = await data.save();
+    result = result.toObject();
+    delete result.password;
+
+    Jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+      if (err) {
+        res
+          .status(500)
+          .send("Something went wrong! Please try again after some time");
+      }
+      res.send({ result, auth: token });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 app.post("/login", async (req, res) => {
   try {
     if (req.body.email && req.body.password) {
@@ -92,8 +127,12 @@ app.get("/productsList", verifyToken, async (req, res) => {
   }
 });
 app.delete("/product/:id", verifyToken, async (req, res) => {
-  const data = await Products.deleteOne({ _id: req.params.id });
-  res.send(data);
+  try {
+    const data = await Products.deleteOne({ _id: req.params.id });
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
 });
 app.get("/product/:id", verifyToken, async (req, res) => {
   try {
@@ -154,4 +193,6 @@ function verifyToken(req, res, next) {
     res.status(403).send({ result: "Please add token with header" });
   }
 }
+app.use("./.netfily/functions/index", router);
+module.exports.handler = serverless(app);
 app.listen(5000);

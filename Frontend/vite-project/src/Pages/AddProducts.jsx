@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
 
 const AddProducts = () => {
   const storedData = JSON.parse(localStorage.getItem("user")) || {};
@@ -28,8 +29,6 @@ const AddProducts = () => {
   };
 
   const handleClick = async () => {
-    console.log("Productssaaaa", productData);
-
     try {
       const formData = new FormData();
       formData.append("name", productData.name);
@@ -66,73 +65,75 @@ const AddProducts = () => {
   };
 
   return (
-    <>
-      <div className="product">
-        <h1> Add Products</h1>
-        <input
-          className="inputBox"
-          type="text"
-          placeholder="Enter Product Name"
-          onChange={handleChange}
-          name="name"
-          value={productData.name}
-        />
-        {error && !productData.name ? (
-          <span className="invalid-input">Enter Valid Name</span>
-        ) : (
-          ""
-        )}
-        <input
-          className="inputBox"
-          type="text"
-          placeholder="Enter Product Price"
-          onChange={handleChange}
-          name="price"
-          value={productData.price}
-        />
-        {error && !productData.price ? (
-          <span className="invalid-input">Enter Valid Price</span>
-        ) : (
-          ""
-        )}
-        <input
-          className="inputBox"
-          type="text"
-          placeholder="Enter Product Category"
-          onChange={handleChange}
-          name="category"
-          value={productData.category}
-        />
-        {error && !productData.category ? (
-          <span className="invalid-input">Enter Valid Category</span>
-        ) : (
-          ""
-        )}
-        <input
-          className="inputBox"
-          type="text"
-          placeholder="Enter Product Company"
-          onChange={handleChange}
-          name="company"
-          value={productData.company}
-        />
-        {error && !productData.company ? (
-          <span className="invalid-input">Enter Valid Company</span>
-        ) : (
-          ""
-        )}
-        <input
-          onChange={(e) =>
-            setProductData({ ...productData, file: e.target.files[0] })
-          }
-          type="file"
-          required
-        />
-        <button onClick={handleClick} className="appButton">
-          Add Product
-        </button>
-      </div>
-    </>
+    <div style={{ textAlign: "center", margin: "auto", width: "500px" }}>
+      <h1> Add Products</h1>
+      <TextField
+        style={{ marginBottom: "10px" }}
+        label="Enter Product Name"
+        onChange={handleChange}
+        name="name"
+        value={productData.name}
+        sx={{ width: "400px" }}
+      />
+      {error && !productData.name ? (
+        <span style={{ color: "red" }}>Enter Valid Name</span>
+      ) : (
+        ""
+      )}
+      <TextField
+        style={{ marginBottom: "10px" }}
+        label="Enter Product Price"
+        onChange={handleChange}
+        name="price"
+        value={productData.price}
+        sx={{ width: "400px" }}
+      />
+      {error && !productData.price ? (
+        <span style={{ color: "red" }}>Enter Valid Price</span>
+      ) : (
+        ""
+      )}
+      <TextField
+        style={{ marginBottom: "10px" }}
+        label="Enter Product Category"
+        onChange={handleChange}
+        name="category"
+        value={productData.category}
+        sx={{ width: "400px" }}
+      />
+      {error && !productData.category ? (
+        <span style={{ color: "red" }}>Enter Valid Category</span>
+      ) : (
+        ""
+      )}
+      <TextField
+        style={{ marginBottom: "10px" }}
+        label="Enter Product Company"
+        onChange={handleChange}
+        name="company"
+        value={productData.company}
+        sx={{ width: "400px" }}
+      />
+      {error && !productData.company ? (
+        <span style={{ color: "red" }}>Enter Valid Company</span>
+      ) : (
+        ""
+      )}
+      <input
+        onChange={(e) =>
+          setProductData({ ...productData, file: e.target.files[0] })
+        }
+        type="file"
+        required
+      />
+      <Button
+        onClick={handleClick}
+        variant="contained"
+        style={{ marginTop: "15px" }}
+      >
+        Add Product
+      </Button>
+    </div>
   );
 };
 

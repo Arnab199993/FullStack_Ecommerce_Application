@@ -1,15 +1,15 @@
-import React from "react";
-import Navbar from "../Component/Navbar";
-import Footer from "../Component/Footer";
+// import React from "react";
+// import Navbar from "../Component/Navbar";
+// import Footer from "../Component/Footer";
 
-const LogOut = () => {
-  return (
-    <>
-      <div>
-        <h1>LogOut</h1>
-      </div>
-    </>
-  );
-};
+// const LogOut = () => {
+//   return (
+//     <>
+//       <div>
+//         <h1>LogOut</h1>
+//       </div>
+//     </>
+//   );
+// };
 
-export default LogOut;
+// export default LogOut;
