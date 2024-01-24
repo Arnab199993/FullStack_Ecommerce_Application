@@ -7,7 +7,6 @@ import Product from "./Component/Product";
 import SignUp from "./Auth/SignUp";
 import Navbar from "./Component/Navbar";
 import AddProducts from "./Pages/AddProducts";
-import Profile from "./Pages/Profile";
 import UpdateProducts from "./Pages/UpdateProducts";
 import Login from "./Auth/Login";
 function App() {
