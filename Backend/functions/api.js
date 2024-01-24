@@ -1,14 +1,15 @@
 const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
+const serveless = require("serverless-http");
 const cors = require("cors");
-require("./DataBase/Config");
-const users = require("./DataBase/Users");
-const Products = require("./DataBase/Products");
+require("../DataBase/Config");
+const users = require("../DataBase/Users");
+const Products = require("../DataBase/Products");
 const Jwt = require("jsonwebtoken");
 const jwtKey = "E-Commerce";
 const app = express();
-
+const router = express.Router();
 app.use(express.json());
 app.use(cors());
 app.use("/Uploads", express.static("Uploads"));
@@ -28,7 +29,7 @@ const upload = multer({
   }),
 }).single("file");
 
-app.get("/", verifyToken, async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const data = await users.find();
     res.send(data);
@@ -36,7 +37,7 @@ app.get("/", verifyToken, async (req, res) => {
     console.log(error);
   }
 });
-app.post("/sign-up", async (req, res) => {
+router.post("/sign-up", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -68,7 +69,7 @@ app.post("/sign-up", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     if (req.body.email && req.body.password) {
       const data = await users.findOne(req.body).select("-password");
@@ -87,7 +88,7 @@ app.post("/login", async (req, res) => {
     console.log(error);
   }
 });
-app.post("/add-product", upload, verifyToken, async (req, res) => {
+router.post("/add-product", upload, verifyToken, async (req, res) => {
   try {
     const data = new Products(req.body);
     data.files = req.file.path;
@@ -102,7 +103,7 @@ app.post("/add-product", upload, verifyToken, async (req, res) => {
     console.log(error);
   }
 });
-app.get("/productsList", verifyToken, async (req, res) => {
+router.get("/productsList", verifyToken, async (req, res) => {
   const data = await Products.find();
   if (data.length > 0) {
     res.send(data);
@@ -110,7 +111,7 @@ app.get("/productsList", verifyToken, async (req, res) => {
     res.send({ result: "No result found" });
   }
 });
-app.delete("/product/:id", verifyToken, async (req, res) => {
+router.delete("/product/:id", verifyToken, async (req, res) => {
   try {
     const data = await Products.deleteOne({ _id: req.params.id });
     res.send(data);
@@ -118,7 +119,7 @@ app.delete("/product/:id", verifyToken, async (req, res) => {
     console.log(error);
   }
 });
-app.get("/product/:id", verifyToken, async (req, res) => {
+router.get("/product/:id", verifyToken, async (req, res) => {
   try {
     let result = await Products.findOne({ _id: req.params.id });
     if (result) {
@@ -130,7 +131,7 @@ app.get("/product/:id", verifyToken, async (req, res) => {
     console.log(error);
   }
 });
-app.put("/product/:id", verifyToken, async (req, res) => {
+router.put("/product/:id", verifyToken, async (req, res) => {
   try {
     let result = await Products.updateOne(
       { _id: req.params.id },
@@ -142,7 +143,7 @@ app.put("/product/:id", verifyToken, async (req, res) => {
     console.log(error);
   }
 });
-app.get("/search/:key", verifyToken, async (req, res) => {
+router.get("/search/:key", verifyToken, async (req, res) => {
   const data = await Products.find({
     $or: [
       {
@@ -177,5 +178,6 @@ function verifyToken(req, res, next) {
     res.status(403).send({ result: "Please add token with header" });
   }
 }
-
-app.listen(5000);
+app.use("/.netlify/functions/api", router);
+module.exports.handler = serveless(app);
+// app.listen(5000);
