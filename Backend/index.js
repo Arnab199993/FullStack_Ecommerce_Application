@@ -36,20 +36,6 @@ app.get("/", verifyToken, async (req, res) => {
     console.log(error);
   }
 });
-// app.post("/sign-up", async (req, res) => {
-//   const data = new users(req.body);
-//   let result = await data.save();
-//   result = result.toObject();
-//   delete result.password;
-//   console.log(req.body);
-//   console.log(result);
-//   Jwt.sign({ result }, jwtKey, { expiresIn: "2h" }, (err, token) => {
-//     if (err) {
-//       res.send("Something went wrong!Please try again after some time");
-//     }
-//     res.send({ result, auth: token });
-//   });
-// });
 app.post("/sign-up", async (req, res) => {
   try {
     const { name, email, password } = req.body;

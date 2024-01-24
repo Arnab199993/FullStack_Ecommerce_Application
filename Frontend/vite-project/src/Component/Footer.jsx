@@ -1,16 +1,3 @@
-// import React from "react";
-
-// const Footer = () => {
-//   return (
-//     <>
-//       <div className="footer">
-//         <h1>E-commerce dashboard footer</h1>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Footer;
 import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";

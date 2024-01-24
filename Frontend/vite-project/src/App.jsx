@@ -4,7 +4,6 @@ import Footer from "./Component/Footer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateComponent from "./Component/PrivateComponent";
 import Product from "./Component/Product";
-// import LogOut from "./Auth/LogOut";
 import SignUp from "./Auth/SignUp";
 import Navbar from "./Component/Navbar";
 import AddProducts from "./Pages/AddProducts";
@@ -24,7 +23,6 @@ function App() {
               <Route path="/navbar" element={<Navbar />} />
               <Route path="/products" element={<AddProducts />} />
               <Route path="/update/:id" element={<UpdateProducts />} />
-              {/* <Route path="/logout" element={<LogOut />} /> */}
             </Route>
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />

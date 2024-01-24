@@ -99,6 +99,7 @@ const Product = () => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Sl No.</StyledTableCell>
+            <StyledTableCell align="right">Name</StyledTableCell>
             <StyledTableCell align="right">Company</StyledTableCell>
             <StyledTableCell align="right">Category</StyledTableCell>
             <StyledTableCell align="right">Price</StyledTableCell>
@@ -112,6 +113,7 @@ const Product = () => {
               <StyledTableCell component="th" scope="row">
                 {i + 1}
               </StyledTableCell>
+              <StyledTableCell align="right">{row.name}</StyledTableCell>
               <StyledTableCell align="right">{row.company}</StyledTableCell>
               <StyledTableCell align="right">{row.category}</StyledTableCell>
               <StyledTableCell align="right">{row.price}</StyledTableCell>
