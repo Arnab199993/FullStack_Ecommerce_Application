@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/Uploads", express.static("Uploads"));
 
-const uploadDirectory = "Uploads";
+const uploadDirectory = "functions/Uploads";
 if (!fs.existsSync(uploadDirectory)) {
   fs.mkdirSync(uploadDirectory);
 }
