@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
 
 const UpdateProducts = () => {
-  const BASE_URL = "http://localhost:5000";
+  // const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "https://fullstack-ecommerce-application.onrender.com";
   const defaultData = {
     name: "",
     price: "",

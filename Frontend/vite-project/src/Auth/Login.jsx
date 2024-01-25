@@ -12,8 +12,8 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-const BASE_URL = "http://localhost:5000";
-// const BASE_URL = "https://fullstack-ecommerce-application.onrender.com";
+// const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://fullstack-ecommerce-application.onrender.com";
 function Copyright(props) {
   return (
     <Typography

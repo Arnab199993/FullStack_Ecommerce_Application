@@ -4,7 +4,8 @@ import { TextField, Button } from "@mui/material";
 
 const AddProducts = () => {
   const storedData = JSON.parse(localStorage.getItem("user")) || {};
-  const BASE_URL = "http://localhost:5000";
+  // const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "https://fullstack-ecommerce-application.onrender.com";
   const defaultData = {
     name: "",
     price: "",

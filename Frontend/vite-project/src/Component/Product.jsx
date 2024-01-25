@@ -16,8 +16,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { useProductContext } from "../Context/ProductContext";
 import { useNavigate } from "react-router-dom";
-const BASE_URL = "http://localhost:5000";
-
+// const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://fullstack-ecommerce-application.onrender.com";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${theme.breakpoints.down("md")}`]: {
     fontSize: 12,

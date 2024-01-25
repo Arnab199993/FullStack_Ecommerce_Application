@@ -21,8 +21,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useProductContext } from "../Context/ProductContext";
 import { useLocation } from "react-router-dom";
 
-const BASE_URL = "http://localhost:5000";
-
+// const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://fullstack-ecommerce-application.onrender.com";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
