@@ -8,7 +8,11 @@ import Link from "@mui/material/Link";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary">
+    <Typography
+      sx={{ textAlign: "center" }}
+      variant="body2"
+      color="text.secondary"
+    >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
@@ -18,8 +22,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function StickyFooter() {
@@ -45,7 +47,7 @@ export default function StickyFooter() {
                 : theme.palette.grey[800],
           }}
         >
-          <Container maxWidth="sm">
+          <Container sx={{ textAlign: "center" }} maxWidth="sm">
             <Typography variant="body1">E commerce Dashboard</Typography>
             <Copyright />
           </Container>
