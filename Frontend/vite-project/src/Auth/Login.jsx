@@ -41,6 +41,7 @@ export default function Login() {
   };
 
   const [userData, setUserData] = useState(defaultState);
+  const [auth, setAuth] = useState(true);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -48,8 +49,10 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
+    setAuth(true);
     try {
       if (userData.email !== "" && userData.password !== "") {
+        setAuth(false);
         const response = await fetch(`${BASE_URL}/login`, {
           method: "POST",
           body: JSON.stringify({
@@ -165,15 +168,28 @@ export default function Login() {
                 value={userData.password}
                 onChange={handleChange}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={handleLogin}
-              >
-                Sign In
-              </Button>
+              {auth ? (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleLogin}
+                >
+                  Sign In
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleLogin}
+                >
+                  Signing In...
+                </Button>
+              )}
+
               <Grid container>
                 <Grid item>
                   <Link to="/register" variant="body2">
