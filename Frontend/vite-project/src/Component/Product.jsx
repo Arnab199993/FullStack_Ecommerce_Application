@@ -54,8 +54,13 @@ const Product = () => {
         },
       });
       const data = await res.json();
+      console.log("dataaaa", data);
       if (data?.length > 0) {
         setProduct(data);
+      }
+      if (data.result == "Please provide valid token") {
+        window.localStorage.clear();
+        navigate("/register");
       }
     } catch (error) {
       console.log(error);
